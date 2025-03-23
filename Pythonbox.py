@@ -63,16 +63,18 @@ class GUI(tk.Tk):
         self.add_player_button.pack(pady=5)
 
     def deposit(self):
-        try:
-            amount = float(self.amount_entry.get())
-            if amount > 0:
-                self.balance += amount
-                self.update_balance_label()
-                self.amount_entry.delete(0, tk.END)
-            else:
-                messagebox.showerror("Error", "Please enter a positive amount.")
-        except ValueError:
-            messagebox.showerror("Error", "Invalid amount.")
+     try:
+        amount = float(self.amount_entry.get())
+        if amount > 30:
+            messagebox.showerror("Error", "Task is not worth this high of an amount. Please enter a lower amount.")
+        elif amount > 0:
+            self.balance += amount
+            self.update_balance_label()
+            self.amount_entry.delete(0, tk.END)
+        else:
+            messagebox.showerror("Error", "Please enter a positive amount.")
+     except ValueError:
+        messagebox.showerror("Error", "Invalid amount.")
 
     def withdraw(self):
         try:
@@ -120,6 +122,7 @@ class GUI(tk.Tk):
             index = self.tasklist.curselection()[0]
             self.tasks.pop(index)
             self.update_tasklist()
+            self.add_points_to_scoreboard()
         except IndexError:
             messagebox.showerror("Error", "Please select a task to check.")
 
@@ -127,6 +130,11 @@ class GUI(tk.Tk):
         self.tasklist.delete(0, tk.END)
         for task in self.tasks:
             self.tasklist.insert(tk.END, task)
+
+    def add_points_to_scoreboard(self):
+        for player in self.scoreboard:
+            self.scoreboard[player] += 10
+        self.update_scoreboard()
 
 if __name__ == "__main__":
     app = GUI()
